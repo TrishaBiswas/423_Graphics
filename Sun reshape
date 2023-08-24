@@ -1,0 +1,72 @@
+from OpenGL.GL import *
+from OpenGL.GLUT import *
+from OpenGL.GLU import *
+import sys
+import math
+import time
+
+# Constants for window dimensions
+WINDOW_WIDTH = 800
+WINDOW_HEIGHT = 600
+
+# Sun parameters
+sun_radius = 0.5
+sun_speed = 0.01  # Adjust the speed as needed
+
+# Initial sun position
+sun_x = 0.0
+sun_y = 0.0
+sun_z = -1.0  # Start far away from the viewer
+
+
+# Function to draw the sun
+def draw_sun(x, y, z, radius):
+    glColor3f(1.0, 1.0, 0.0)  # Yellow color
+    glTranslatef(x, y, z)
+    glutSolidSphere(radius, 100, 100)
+    glTranslatef(-x, -y, -z)
+
+
+# Function to handle window resizing
+def reshape(width, height):
+    glViewport(0, 0, width, height)
+    glMatrixMode(GL_PROJECTION)
+    glLoadIdentity()
+    gluPerspective(45, (width / height), 0.5, 100.0)
+    glMatrixMode(GL_MODELVIEW)
+
+
+# Function to update sun position
+def update_sun():
+    global sun_z
+    t = time.time()
+    sun_z = -2.0 + 0.5 * math.sin(t * sun_speed)  # Vary the Z-coordinate for near and far effect
+
+
+# Function to display the scene
+def display():
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+    glLoadIdentity()
+
+    glTranslatef(0.0, 0.0, -3.0)  # Move the camera back
+    draw_sun(sun_x, sun_y, sun_z, sun_radius)
+    update_sun()
+
+    glutSwapBuffers()
+
+
+# Initialize OpenGL and create the window
+glutInit(sys.argv)
+glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH)
+glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT)
+glutCreateWindow(b"Sun reshape")
+
+# Enable depth testing for 3D effect
+glEnable(GL_DEPTH_TEST)
+
+# Set the display and reshape functions
+glutDisplayFunc(display)
+glutReshapeFunc(reshape)
+
+# Start the main loop
+glutMainLoop()
