@@ -1,0 +1,223 @@
+from OpenGL.GL import *
+from OpenGL.GLUT import *
+from OpenGL.GLU import *
+
+
+def findZone(x0, y0, x1, y1):
+    dx = x1 - x0
+    dy = y1 - y0
+
+    if dx == 0:
+        dx = 1
+
+    if dy == 0:
+        dy = -1
+
+    if abs(dy) > abs(dx):
+        if dx > 0 and dy > 0:
+            zone = 1
+
+        elif dx < 0 and dy > 0:
+            zone = 2
+
+        elif dx < 0 and dy < 0:
+            zone = 5
+
+        elif dx > 0 and dy < 0:
+            zone = 6
+
+
+    else:
+        if dx > 0 and dy > 0:
+            zone = 0
+
+        elif dx < 0 and dy > 0:
+            zone = 3
+
+        elif dx < 0 and dy < 0:
+            zone = 4
+
+        elif dx > 0 and dy < 0:
+            zone = 7
+
+    converttoZone0(x0, y0, x1, y1, zone)
+
+
+def converttoZone0(x0, y0, x1, y1, zone):
+    X0 = x0
+    Y0 = y0
+    X1 = x1
+    Y1 = y1
+
+    if zone == 0:
+        x_0 = X0
+        y_0 = Y0
+        x_1 = X1
+        y_1 = Y1
+
+    elif zone == 1:
+        x_0 = Y0
+        y_0 = X0
+        x_1 = Y1
+        y_1 = X1
+
+    elif zone == 2:
+        x_0 = Y0
+        y_0 = -X0
+        x_1 = Y1
+        y_1 = -X1
+
+    elif zone == 3:
+        x_0 = -X0
+        y_0 = Y0
+        x_1 = -X1
+        y_1 = Y1
+
+    elif zone == 4:
+        x_0 = -X0
+        y_0 = -Y0
+        x_1 = -X1
+        y_1 = -Y1
+
+    elif zone == 5:
+        x_0 = -Y0
+        y_0 = -X0
+        x_1 = -Y1
+        y_1 = -X1
+
+    elif zone == 6:
+        x_0 = -Y0
+        y_0 = X0
+        x_1 = -Y1
+        y_1 = X1
+
+    elif zone == 7:
+        x_0 = X0
+        y_0 = -Y0
+        x_1 = X1
+        y_1 = -Y1
+
+    midpointlinealgorithm(x_0, y_0, x_1, y_1, zone)
+
+def midpointlinealgorithm(x_0, y_0, x_1, y_1, zone):
+    dX = x_1 - x_0
+    dY = y_1 - y_0
+
+    if dX == 0:
+        dX = 1
+
+    if dY == 0:
+        dY = -0.5
+
+    d = 2 * dY - dX
+    incrementNE = 2 * (dY - dX)
+    incrementE = 2 * dY
+
+    X = x_0
+    Y = y_0
+
+    while X < x_1:
+
+        if d > 0:
+            d = d + incrementNE
+            Y = Y + 1
+            X = X + 1
+        else:
+            d = d + incrementE
+            X = X + 1
+
+        originalzone(X, Y, zone)
+
+
+def originalzone(X, Y, zone):
+    if zone == 0:
+        x = X
+        y = Y
+        draw(x, y)
+
+    if zone == 1:
+        x = Y
+        y = X
+        draw(x, y)
+
+    if zone == 2:
+        x = -Y
+        y = X
+        draw(x, y)
+
+    if zone == 3:
+        x = -X
+        y = Y
+        draw(x, y)
+
+    if zone == 2:
+        x = -Y
+        y = X
+        draw(x, y)
+
+    if zone == 5:
+        x = -Y
+        y = -X
+        draw(x, y)
+
+    if zone == 6:
+        x = Y
+        y = -X
+        draw(x, y)
+
+    if zone == 7:
+        x = X
+        y = -Y
+        draw(x, y)
+
+
+def draw(X, Y):
+    glPointSize(2)
+    glBegin(GL_POINTS)
+    glVertex2f(X, Y)
+    glEnd()
+
+
+def iterate():
+    glViewport(0, 0, 400, 400)
+    glMatrixMode(GL_PROJECTION)
+    glLoadIdentity()
+    glOrtho(0.0, 400, 0.0, 400, 0.0, 1.0)
+    glMatrixMode(GL_MODELVIEW)
+    glLoadIdentity()
+
+
+def showScreen():
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+    glLoadIdentity()
+    iterate()
+
+    # For 2nd last digit
+    glColor3f(1.0, 0.0, 0.0)
+    findZone(70, 350, 140, 350)
+    findZone(140, 350, 140, 270)
+    findZone(70, 270, 140, 270)
+    findZone(70, 270, 70, 190)
+    findZone(70, 190, 140, 190)
+
+
+
+    # For last digit
+    glColor3f(1.0, 0.0, 0.0)
+    findZone(170, 350, 240, 350)
+    findZone(170, 350, 170, 190)
+    findZone(170, 190, 240, 190)
+    findZone(240, 190, 240, 350)
+    findZone(170, 270, 240, 270)
+
+    glutSwapBuffers()
+
+
+glutInit()
+glutInitDisplayMode(GLUT_RGBA)
+glutInitWindowSize(400, 400)
+glutInitWindowPosition(0, 0)
+wind = glutCreateWindow(b"STUDENT ID : 20101628 {Printing - 28}")
+glutDisplayFunc(showScreen)
+glutIdleFunc(showScreen)
+glutMainLoop()
