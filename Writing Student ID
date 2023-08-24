@@ -1,0 +1,104 @@
+from OpenGL.GL import *
+from OpenGL.GLUT import *
+from OpenGL.GLU import *
+
+
+
+def draw_lines(x1,y1, x2,y2):
+  glPointSize(500)
+  glBegin(GL_LINES)
+  glVertex2f(x1, y1)
+  glVertex2f(x2, y2)
+
+  glEnd()
+
+def draw_points(x, y):
+  glPointSize(50)
+  glBegin(GL_POINTS)
+  glVertex2f(x,y) #jekhane show korbe pixel
+  glEnd()
+
+
+def iterate():
+  glViewport(0, 0, 500,500)
+  glMatrixMode(GL_PROJECTION)
+  glLoadIdentity()
+  glOrtho(0.0,500, 0.0, 500, 0.0, 1.0)
+  glMatrixMode (GL_MODELVIEW)
+  glLoadIdentity()
+
+def showScreen():
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+  glLoadIdentity()
+  iterate()
+  glColor3f(0.0, 1.0, 0.0)
+
+  #For 1st digit
+  draw_lines(20,450,90,450)
+  draw_lines(90,450, 90, 370)
+  draw_lines(20,370,90,370)
+  draw_lines(20, 370, 20, 290)
+  draw_lines(20,290,90,290)
+
+  # For 2nd digit
+  glColor3f(1.0, 0.0, 0.0)
+  draw_lines(120, 450, 190, 450)
+  draw_lines(120, 450, 120, 290)
+  draw_lines(120, 290, 190, 290)
+  draw_lines(190, 290, 190, 450)
+
+  #For 3rd digit
+  glColor3f(0.0, 0.0, 1.0)
+  draw_lines(220, 390, 240, 450)
+  draw_lines(240, 450,  270,450)
+  draw_lines(220, 290, 320, 290)
+  draw_lines(270, 450, 270, 290)
+
+  # For 4th digit
+  glColor3f(1.0, 1.0, 0.0)
+  draw_lines(350, 450, 420, 450)
+  draw_lines(420, 450, 420, 290)
+  draw_lines(350, 290, 420, 290)
+  draw_lines(350, 290, 350, 450)
+
+  # For 5th digit
+  glColor3f(0.0, 1.0, 1.0)
+  draw_lines(20, 180, 40, 240)
+  draw_lines(40, 240, 70, 240)
+  draw_lines(70, 240, 70, 80)
+  draw_lines(20, 80, 120, 80)
+
+  # For 6th digit
+  glColor3f(1.0, 0.0, 1.0)
+  draw_lines(150, 80, 220, 80)
+  draw_lines(150, 80, 150, 240)
+  draw_lines(150, 240, 220, 240)
+  draw_lines(220, 80, 220, 160)
+  draw_lines(150,160, 220, 160)
+
+  #For 7th digit
+  glColor3f(1.0, 1.0, 1.0)
+  draw_lines(250, 80, 320, 80)
+  draw_lines(250, 80, 250, 160)
+  draw_lines(250, 160, 320, 160)
+  draw_lines(320, 160, 320, 240)
+  draw_lines(320, 240, 250, 240)
+
+  #For 8th digit
+  glColor3f(0.0, 1.0, 0.0)
+  draw_lines(350, 240, 350, 80)
+  draw_lines(350, 80, 420, 80)
+  draw_lines(420, 80, 420, 240)
+  draw_lines(350, 240, 420, 240)
+  draw_lines(350, 160, 420, 160)
+
+  glutSwapBuffers()
+
+glutInit()
+glutInitDisplayMode(GLUT_RGBA)
+glutInitWindowSize(500, 500)
+glutInitWindowPosition(0, 0)
+wind = glutCreateWindow(b"STUDENT ID")
+glutDisplayFunc(showScreen)
+
+glutMainLoop()
